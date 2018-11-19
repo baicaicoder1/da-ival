@@ -1,6 +1,6 @@
 
 
-# thymeleafÄ£°åÅäÖÃspring:
+# thymeleafæ¨¡æ¿é…ç½®ä¿¡æ¯
   thymeleaf:
     prefix: classpath:/templates/
   spring:
@@ -17,13 +17,13 @@
           content:
             enabled: false
             paths: /**
-    # Êı¾İ¿âÅäÖÃ
+   # æ•°æ®åº“é…ç½®
     datasource:
       url: jdbc:mysql://127.0.0.1:3306/test
       username: root
       password: root
 
-
+  #æœåŠ¡å™¨é…ç½®
   server:
     port: 8080
 

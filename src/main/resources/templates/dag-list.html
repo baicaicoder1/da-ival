@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>da-ival</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{../layui/css/layui.css}" rel="stylesheet"/>
+    <link th:href="@{../css/index.css}" rel="stylesheet"/>
+</head>
+<body style="background-color: #e6e6e6">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <a href="../dags">
+                <div class="layui-col-md2">
+                    DA-IVAL
+                </div>
+            </a>
+            <a href="../dags">
+                <div class="layui-col-md1">
+                    Dags
+                </div>
+            </a>
+            <a href="">
+                <div class="layui-col-md1">
+                    Monitor
+                </div>
+            </a>
+            <div class="layui-col-md8">
+                <a href="">
+                    <span class="banner-right-item">DOC</span>
+                </a>
+                <a href="">
+                    <span class="banner-right-item">XXXX</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <div class="layui-col-md5">
+                Dag:usr_bgx765h31107
+            </div>
+            <div class="layui-col-md7">
+                <button class="layui-btn layui-btn-normal" onclick="addDagContent()">新建</button>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">任务列表</li>
+                    <li>执行记录</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <table class="layui-table" lay-even lay-skin="nob">
+                            <colgroup>
+                                <col width="150">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>任务Code</th>
+                                <th>任务类型</th>
+                                <th>依赖任务</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="a:${msg}">
+                                <td>1234</td>
+                                <td>exp_pre_usr_sales_process_report_dd</td>
+                                <td>MySqlTransfer</td>
+                                <td>
+                                    <span>查看详情</span>
+                                </td>
+                                <td>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">删除</button>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">修改</button>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">下线</button>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">运行上下游</button>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">运行单表</button>
+                                    <button class="layui-btn layui-btn-normal layui-btn-xs">执行记录</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="layui-tab-item">内容2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{../layui/layui.all.js}"></script>
+    <script th:src="@{../js/add-dag-content.js}"></script>
+</body>
+</html>

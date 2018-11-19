@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>da-ival</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{layui/css/layui.css}" rel="stylesheet"/>
+    <link th:href="@{css/adddag.css}" rel="stylesheet"/>
+</head>
+<body>
+<form class="layui-form" action="">
+
+    <div class="layui-form-item">
+        <label class="layui-input-block">任务类型</label>
+        <div class="layui-input-block">
+            <select name="city" lay-verify="required">
+                <option value=""></option>
+                <option value="0">北京</option>
+                <option value="1">上海</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            任务Code
+        </div>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            依赖关系
+        </div>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            目标库
+        </div>
+        <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required"  autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-input-block">SQL</label>
+        <div class="layui-input-block">
+            <textarea name="desc" class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+            <button class="layui-btn layui-btn-primary" onclick="closeAddDag()">取消</button>
+        </div>
+    </div>
+</form>
+    <script th:src="@{/layui/layui.all.js}"></script>
+    <script th:src="@{/js/adddag.js}"></script>
+
+</body>
+</html>

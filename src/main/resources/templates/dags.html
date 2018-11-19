@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>da-ival</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link th:href="@{layui/css/layui.css}" rel="stylesheet"/>
     <link th:href="@{css/index.css}" rel="stylesheet"/>
@@ -9,12 +9,12 @@
 <body style="background-color: #e6e6e6">
     <div class="layui-fluid">
         <div class="layui-row">
-            <a href="">
+            <a href="#">
                 <div class="layui-col-md2">
                     DA-IVAL
                 </div>
             </a>
-            <a href="">
+            <a href="#">
                 <div class="layui-col-md1">
                     Dags
                 </div>
@@ -41,7 +41,7 @@
                 项目
             </div>
             <div class="layui-col-md7">
-                <button class="layui-btn layui-btn-normal">新建</button>
+                <button class="layui-btn layui-btn-normal" onclick="addDag()">新建</button>
             </div>
         </div>
         <div class="layui-card-body">
@@ -66,8 +66,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>usr_bgx765h31107</td>
+                    <tr th:each="a:${msg}">
+                        <td ><a href="./dag/usr_bgx765h31107" class="drags-id">usr_bgx765h31107</a> </td>
                         <td>显示报表</td>
                         <td> 0 0 0 0 0</td>
                         <td>08:30</td>
@@ -83,44 +83,6 @@
                             <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
                             <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
                             <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>usr_bgx765h31107</td>
-                        <td>显示报表</td>
-                        <td> 0 0 0 0 0</td>
-                        <td>08:30</td>
-                        <td>usr</td>
-                        <td>23</td>
-                        <td>XXXX</td>
-                        <td>2018-11-19 15:36:26</td>
-                        <td>
-                            <button class="layui-btn layui-btn-xs">成功</button>
-                        </td>
-                        <td>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>usr_bgx765h31107</td>
-                        <td>显示报表</td>
-                        <td> 0 0 0 0 0</td>
-                        <td>08:30</td>
-                        <td>usr</td>
-                        <td>23</td>
-                        <td>XXXX</td>
-                        <td>2018-11-19 15:36:26</td>
-                        <td>
-                            <button class="layui-btn layui-btn-xs">成功</button>
-                        </td>
-                        <td>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">删除</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">修改</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">下线</button>
-                            <button class="layui-btn layui-btn-normal layui-btn-xs">详情</button>
                         </td>
                     </tr>
                 </tbody>
@@ -128,15 +90,7 @@
         </div>
     </div>
 
-
-
     <script th:src="@{/layui/layui.all.js}"></script>
-<script>
-    ;!function(){
-        var layer = layui.layer
-            ,form = layui.form;
-        layer.msg('Hello World');
-    }();
-</script>
+    <script th:src="@{/js/dags.js}"></script>
 </body>
 </html>
