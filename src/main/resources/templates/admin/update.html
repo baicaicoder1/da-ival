@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" th:href="@{/static/element-ui/lib/theme-chalk/index.css}">
+    </head>
+    <body>
+        <div id="app">
+            <el-form :model="account">
+                <el-form-item label="用户名" :label-width="formLabelWidth">
+                    <el-input v-model="account.username" auto-complete="off" style="width: 300px"></el-input>
+                </el-form-item>
+                <el-form-item label="性别" :label-width="formLabelWidth">
+                    <el-radio-group v-model="account.gender" style="width: 300px">
+                        <el-radio :label=0>男</el-radio>
+                        <el-radio :label=1>女</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="等级" :label-width="formLabelWidth">
+                    <el-input v-model="account.level" auto-complete="off" style="width: 300px" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="金币" :label-width="formLabelWidth" >
+                    <el-input v-model="account.coin" auto-complete="off" style="width: 300px" type="number"></el-input>
+                </el-form-item>
+                <el-form-item label="地址" :label-width="formLabelWidth">
+                    <el-row >
+                        <el-cascader style="width: 300px"
+                                :options="options"
+                                v-model="selectedOptions"
+                                @change="handleChange">
+                        </el-cascader>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+            <el-row style="margin-top: 10px">
+                <el-button type="success" plain style="width: 120px" @click="submitForm">确定</el-button>
+                <el-button type="primary" plain style="width: 120px" @click="cancle">取消</el-button>
+            </el-row>
+        </div>
+    </body>
+    <script th:src="@{/static/vuejs/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/static/vuejs/vue.js}"></script>
+    <script th:src="@{/static/layer/layer.js}"></script>
+    <script th:src="@{/static/element-ui/lib/index.js}"></script>
+    <script>
+        let vue =new Vue({
+            el:'#app',
+            mounted:function(){
+                $.ajax({
+                    type:'GET',
+                    url:'../data/area.json',
+                    dataType:'json',
+                    success:function (result) {
+                        vue.options = result;
+                    }
+                });
+                this.account =parent.vue.$data.currentRow;
+                this.selectedOptions = new Array(this.account.province,this.account.city,this.account.country);
+            },
+            data:{
+                account :{
+                    username:'',
+                    gender:'',
+                    level:'',
+                    coin:'',
+                    province:'',
+                    city:'',
+                    country:''
+                },
+                options:[],
+                selectedOptions:[],
+                formLabelWidth:'120px'
+            },
+            methods:{
+                handleChange(value) {
+                    this.account.province = value[0];
+                    this.account.city = value[1];
+                    this.account.country = value[2];
+                },
+                submitForm:function () {
+                    $.ajax({
+                        type:'post',
+                        url:'http://172.17.12.30:8898/doUpdate',
+                        data:JSON.stringify(this.account),
+                        contentType:'application/json',
+                        dataType:'json',
+                        success:function (result) {
+                            if(result.msg){
+                                let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                                parent.layer.close(index); //再执行关闭
+                            }else{
+                                layer.msg("录入错误")
+                            }
+                        }
+                    })
+                },
+                cancle:function () {
+                    let index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                }
+            }
+        })
+    </script>
+</html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jackmu.daival.manager.dao.SysUserDao">
+    <select id="findUserByUserName" resultType="com.jackmu.daival.manager.domain.SysUser">
+        select * from user
+        <where>
+            <if test="username != null and username !='' ">
+                username= #{username}
+            </if>
+        </where>
+    </select>
+
+    <select id="findUserRoleByUserName" resultType="com.jackmu.daival.manager.domain.SysRole">
+        SELECT
+            t2.role_id,t2.role_name,t2.role_code,t2.role_desc
+        FROM
+            user t1
+        LEFT JOIN ( SELECT * FROM user_role nur LEFT JOIN role nr ON nur.user_role = nr.role_id) t2 ON t1.id = t2.user_id
+        where t1.username = #{username}
+    </select>
+
+    <select id="findAllUser" resultType="com.jackmu.daival.manager.domain.UserDto">
+        <![CDATA[
+            select id,username from user limit #{start},#{pageSize}
+        ]]>
+    </select>
+
+    <select id="findUserCount" resultType="java.lang.Integer">
+        select count(id) from user
+    </select>
+
+    <select id="addUser" parameterType="com.jackmu.daival.manager.domain.UserDto">
+        insert into user (username,password) value (#{username},#{password})
+    </select>
+</mapper>

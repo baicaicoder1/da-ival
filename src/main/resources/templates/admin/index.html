@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" >
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>index</title>
+        <link rel="stylesheet" th:href="@{/static/element-ui/lib/theme-chalk/index.css}">
+        <style>
+            .el-header{
+                background-color: #b3c0d1;
+                color: #333;
+                line-height: 60px;
+            }
+            .el-aside{
+                color: #333;
+            }
+        </style>
+    </head>
+    <body>
+       <div id="app">
+           <el-container style="border: 1px solid #eee">
+               <el-aside width="200px" style="background-color: rgb(238,241,246)">
+                   <el-menu>
+                       <el-submenu index="1">
+                           <template slot="title"><i class="el-icon-message"></i>用户管理</template>
+                           <el-menu-item-group>
+                               <el-menu-item index="1-1">用户管理</el-menu-item>
+                               <el-menu-item index="1-2">权限管理</el-menu-item>
+                           </el-menu-item-group>
+                       </el-submenu>
+                       <el-submenu index="2">
+                           <template slot="title"><i class="el-icon-menu"></i>系统属性配置</template>
+                           <el-menu-item-group>
+                               <el-menu-item index="2-1">主题配置</el-menu-item>
+                               <el-menu-item index="2-2">任务类型配置</el-menu-item>
+                           </el-menu-item-group>
+                       </el-submenu>
+                   </el-menu>
+               </el-aside>
+               <el-container>
+                   <el-header style="text-align: right;font-size: 12px">
+                       <el-dropdown>
+                           <i class="el-icon-setting" style="margin-right: 15px"></i>
+                           <el-dropdown-menu slot="dropdown">
+                               <el-dropdown-item>查看</el-dropdown-item>
+                               <el-dropdown-item>新增</el-dropdown-item>
+                               <el-dropdown-item>删除</el-dropdown-item>
+                           </el-dropdown-menu>
+                       </el-dropdown>
+                       <span>XXX</span>
+                   </el-header>
+                   <el-main>
+                       <el-row>
+                           <el-col>
+                               <el-input v-model="search" placeholder="请输入内容" clearable style="width: 200px"></el-input>
+                               <el-button type="success" round @click="searchData">搜索</el-button>
+                               <el-button type="success" round @click="getData(currentPage,pageSize)">重置</el-button>
+                           </el-col>
+                       </el-row>
+                       <el-row style="margin-top: 10px">
+                           <el-button type="primary" plain style="width: 120px" @click="add">添加</el-button>
+                       </el-row>
+                       <el-table :data="tableData" @current-change="currentChangeRow" highlight-current-row height="450px">
+                           <el-table-column prop="id" label="id" width="140" v-if="false"></el-table-column>
+                           <el-table-column prop="username" label="用户名" width="140"></el-table-column>
+                       </el-table>
+                       <div class="block" style="text-align: center">
+                           <el-pagination
+                                   @size-change="handleSizeChange"
+                                   @current-change="handleCurrentChange"
+                                   :current-page.sync="currentPage"
+                                   :page-sizes="[10, 20, 30]"
+                                   :page-size="10"
+                                   layout="sizes, prev, pager, next"
+                                   :total="totalSize">
+                           </el-pagination>
+                       </div>
+                   </el-main>
+                   <el-footer style="text-align: center;">
+                       <span >CopyRight@XXXXXXXXXXXXX</span>
+                   </el-footer>
+               </el-container>
+           </el-container>
+       </div>
+    </body>
+    <script th:src="@{/static/vuejs/jquery-3.3.1.min.js}"></script>
+    <script th:src="@{/static/vuejs/vue.js}"></script>
+    <script th:src="@{/static/element-ui/lib/index.js}"></script>
+    <script th:src="@{/static/layer/layer.js}"></script>
+    <script>
+        var vue =new Vue({
+            el:'#app',
+            mounted:function(){
+                this.getData(this.currentPage,this.pageSize);
+            },
+            data:function () {
+                return {
+                    addUserVisible:false,
+                    tableData:[],
+                    formLabelWidth: '120px',
+                    search:'',
+                    currentPage:1,
+                    pageSize: 10,
+                    totalSize:0,
+                    currentRow:null,
+                    options:[],
+                    exports:'导出'
+                }
+            },
+            methods:{
+                loading:function(){
+                    let index = layer.load(0, {shade: false});
+                    return index;
+                },
+                getData:function(start,pageSize){
+                    let index = this.loading();
+                    $.ajax({
+                        type:'post',
+                        url:'/getUsers',
+                        data:{
+                            start: start,
+                            pageSize: pageSize
+                        },
+                        dataType:'JSON',
+                        success:function (result) {
+                            vue.close(index);
+                            vue.tableData = result.data;
+                            vue.totalSize = result.count;
+                        }
+                    })
+                },
+                exportData:function(){
+                    $.ajax({
+                        type:'post',
+                        url:'http://172.17.12.30:8898/export',
+                        data:{
+                            search:vue.search
+                        },
+                        dataType:'JSON',
+                        success:function (result) {
+                            vue.getProgress(result.data);
+                        }
+                    })
+                },
+                getProgress:function(data){
+                    $.ajax({
+                        type:'post',
+                        url:'http://172.17.12.30:8898/progress',
+                        data:{
+                            id:data
+                        },
+                        dataType:'JSON',
+                        success:function (result) {
+                            vue.exports = result.data.progress;
+                            if(result.data.url == null){
+                                vue.getProgress(data);
+                            }else{
+                                window.location.href= result.data.url;
+                            }
+                        }
+                    })
+                },
+                searchData:function(){
+                    let index = this.loading();
+                    $.ajax({
+                        type:'post',
+                        url:'http://172.17.12.30:8898/select',
+                        data:{
+                            search: this.search,
+                            start: vue.currentPage,
+                            pageSize: vue.pageSize
+                        },
+                        dataType:'JSON',
+                        success:function (result) {
+                            vue.close(index);
+                            vue.tableData = result.accounts;
+                            vue.totalSize = result.count;
+                        }
+                    })
+                },
+                close:function(index){
+                    layer.close(index);
+                },
+                add:function () {
+                    layer.open({
+                        type: 2,
+                        fixed: false, //不固定
+                        maxmin: true,
+                        area: ['500px', '450px'], //宽高
+                        content: './add.html'
+                    });
+                },
+                importData:function(){
+                    layer.open({
+                        type: 2,
+                        title:'导入excel',
+                        fixed: false, //不固定
+                        maxmin: true,
+                        area: ['500px', '450px'], //宽高
+                        content: './importAccount.html'
+                    });
+                },
+                update:function(){
+                    layer.open({
+                        type: 2,
+                        fixed: false, //不固定
+                        maxmin: true,
+                        area: ['500px', '450px'], //宽高
+                        content: './update.html'
+                    });
+                },
+                deleteAccount:function(){
+                    if(this.currentRow == null)
+                        layer.msg("请选择要删除的行")
+                    layer.confirm('确定要删除吗？', {
+                        btn: ['确定','取消'] //按钮
+                    }, function(){
+                        $.ajax({
+                            type:'post',
+                            url:'http://172.17.12.30:8898/delete',
+                            data:{
+                                id:vue.currentRow.id
+                            },
+                            dataType:'JSON',
+                            success:function (result) {
+                                layer.msg("删除成功");
+                                vue.currentRow = null;
+                                vue.getData(vue.currentPage,vue.pageSize);
+                            }
+                        })
+                    }, function(){
+
+                    });
+                },
+                handleSizeChange(val) {
+                    this.pageSize = val;
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val;
+                    this.getData(this.currentPage,this.pageSize);
+                },
+                currentChangeRow:function (val) {
+                    this.currentRow = val
+                },
+                formatGender:function(row, column, cellValue, index){
+                    if(cellValue == 0)
+                        return '男';
+                    if(cellValue == 1)
+                        return '女';
+                },
+                getProvince:function (row, column, cellValue, index) {
+                    this.options.map(function (e) {
+                        if(e.value == cellValue){
+                           cellValue = e.label;
+                            return cellValue;
+                        }
+                    })
+                    return cellValue;
+                },
+                getCity:function (row, column, cellValue, index) {
+                    this.options.map(function (e) {
+                        let child = e.children;
+                        if(child){
+                            child.map(function (a) {
+                                if(a.value == cellValue){
+                                    cellValue = a.label;
+                                    return cellValue;
+                                }
+                            })
+                        }
+
+                    })
+                    return cellValue;
+                },
+                getCountry:function (row, column, cellValue, index) {
+                    this.options.map(function (e) {
+                        let child = e.children;
+                        if(child){
+                            child.map(function (a) {
+                                let country = a.children;
+                                if(country){
+                                    country.map(function (e) {
+                                        if(e.value == cellValue){
+                                            cellValue = e.label;
+                                            return cellValue;
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                    return cellValue;
+                }
+            }
+        })
+    </script>
+</html>

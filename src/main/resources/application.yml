@@ -21,7 +21,12 @@
     profiles:
       include: mysql
 
+
   #服务器配置
   server:
     port: 8080
+
+
+  mybatis:
+    mapper-locations: classpath:mapper/*.xml
 
