@@ -66,17 +66,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="a:${msg}">
-                        <td ><a href="./dag/usr_bgx765h31107" class="drags-id">usr_bgx765h31107</a> </td>
-                        <td>显示报表</td>
-                        <td> 0 0 0 0 0</td>
-                        <td>08:30</td>
-                        <td>usr</td>
-                        <td>23</td>
-                        <td>XXXX</td>
-                        <td>2018-11-19 15:36:26</td>
+                    <tr th:each="dag:${dags}">
+                        <td ><a href="./dag/" class="drags-id"  th:text="${dag.dag_no}"></a> </td>
+                        <td th:text="${dag.dag_name}"></td>
+                        <td th:text="${dag.timing}"></td>
+                        <td th:text="${dag.expect_end_time}"></td>
+                        <td th:text="${dag.theme}"></td>
+                        <td th:text="${dag.creator_name}"></td>
+                        <td th:text="${dag.creator_name}"></td>
+                        <td th:text="${#calendars.format(dag.recently_exec,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
-                            <button class="layui-btn layui-btn-xs">成功</button>
+                            <button class="layui-btn layui-btn-xs" th:text="${dag.status}"></button>
                         </td>
                         <td>
                             <button class="layui-btn layui-btn-normal layui-btn-xs">成功</button>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jackmu.daival.dao.DagDao">
+
+    <select id="getAllDag" resultType="com.jackmu.daival.domain.Dag">
+        select * from dag;
+    </select>
+
+    <select id="getDagsByCreator" resultType="com.jackmu.daival.domain.Dag">
+        select * from dag where creator_name=#{creator};
+    </select>
+
+    <select id="getDagsByTheme" resultType="com.jackmu.daival.domain.Dag">
+        select * from dag where theme = #{theme};
+    </select>
+
+    <insert id="addDag" parameterType="com.jackmu.daival.domain.Dag">
+        insert into dag (`dag_no`,
+                          `dag_name`,
+                          `timing`,
+                          `expect_end_time`,
+                          `theme`,
+                          `creator_name`,
+                          `recently_exec`,
+                          `status`) value (
+                                          #{dag_no},
+                                          #{dag_name},
+                                          #{timing},
+                                          #{expect_end_time},
+                                          #{theme},
+                                          #{creator_name},
+                                          #{recently_exec},
+                                          #{status}
+                                        );
+    </insert>
+
+    <update id="updateDag" parameterType="com.jackmu.daival.domain.Dag">
+        update dag set  dag_name= #{dag_name},theme =#{theme},timing=#{timing} ,recently_exec=#{recently_exec}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deleteDag" parameterType="java.lang.String">
+        delete dag
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+</mapper>
